@@ -12,11 +12,15 @@ Assets/AssetStoreTools*
 
 
 
-# Console
+# Console asset
 Assets/Opencoding
 Assets/Opencoding.meta
+Assets/Plugins
+Assets/Plugins.meta
 Assets/PlayServicesResolver
 Assets/PlayServicesResolver.meta
+ProjectSettings/AndroidResolverDependencies.xml
+ProjectSettings/GvhProjectSettings.xml
 
 # Ignore manually added packages
 com.*
