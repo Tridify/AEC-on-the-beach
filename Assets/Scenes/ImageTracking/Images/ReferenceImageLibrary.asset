@@ -45,3 +45,13 @@ MonoBehaviour:
     m_SpecifySize: 1
     m_Name: QRCode
     m_Texture: {fileID: 2800000, guid: a6fd8503774c0402aa403884f5b77f39, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5389981329328020884
+      m_GuidHigh: 13421108960268615086
+    m_SerializedTextureGuid:
+      m_GuidLow: 5635213311660321790
+      m_GuidHigh: 17752058053443578746
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 0
+    m_Name: TrackingTest
+    m_Texture: {fileID: 2800000, guid: 7b10ebfe4ca64e347aeb9dc3befa5bf6, type: 3}

@@ -39,12 +39,15 @@ public class CreatePlaneMesh : MonoBehaviour
 		mesh.name = "Terrain";
 
 		vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+		Vector2[] uv = new Vector2[vertices.Length];
 		for (int i = 0, z = 0; z <= zSize; z++) {
 			for (int x = 0; x <= xSize; x++, i++) {
 				vertices[i] = new Vector3(x, 0, z);
+				uv[i] = new Vector2((float)x / xSize, (float)z / zSize);
 			}
 		}
 		mesh.vertices = vertices;
+		mesh.uv = uv;
 
 		int[] triangles = new int[xSize * zSize * 6];
 		for (int ti = 0, vi = 0, z = 0; z < zSize; z++, vi++) {
