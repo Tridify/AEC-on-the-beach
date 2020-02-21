@@ -14,7 +14,9 @@ Assets/AssetStoreTools*
 
 # Console
 Assets/Opencoding
+Assets/Opencoding.meta
 Assets/PlayServicesResolver
+Assets/PlayServicesResolver.meta
 
 # Ignore manually added packages
 com.*
