@@ -33,7 +33,7 @@ public class CreatePlaneMesh : MonoBehaviour
             for (int x = 0; x <= xSize; x++, i++)
             {
                 float currentHeight = noiseMap[x, z];
-                vertices[i] = new Vector3(x, currentHeight, z);
+                vertices[i] = new Vector3(x , currentHeight, z );
                 colorMap[i] = terranColorsGradient.Evaluate(currentHeight); //Take color from gradient
             }
         }
