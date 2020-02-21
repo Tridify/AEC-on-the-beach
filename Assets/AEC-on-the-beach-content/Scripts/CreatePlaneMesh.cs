@@ -15,7 +15,24 @@ public class CreatePlaneMesh : MonoBehaviour
 
 	private void Awake() {
 		Generate();
-	}
+        UpdateMeshes();
+
+    }
+
+    private void UpdateMeshes()
+    {
+        float[,] noiseMap = Noise.GenerateNoiseMap(xSize + 1, zSize + 1, 0, 10, 2, 1, 1, new Vector2(0,0));
+        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        for (int i = 0, z = 0; z <= zSize; z++)
+        {
+            for (int x = 0; x <= xSize; x++, i++)
+            {
+                float currentHeight = noiseMap[x, z];
+                vertices[i] = new Vector3(x, currentHeight, z);
+            }
+        }
+        mesh.vertices = vertices;
+    }
 
 	private void Generate() {
 		GetComponent<MeshFilter>().mesh = mesh = new Mesh();
