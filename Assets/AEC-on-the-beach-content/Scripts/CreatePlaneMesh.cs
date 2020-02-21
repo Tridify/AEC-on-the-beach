@@ -8,30 +8,37 @@ public class CreatePlaneMesh : MonoBehaviour
 
 	[SerializeField]
 	private int xSize = 10;
-	[SerializeField]
-	private int zSize = 10;
+    [SerializeField]
+    private int zSize = 10;
+    [SerializeField]
+    private AnimationCurve meshHeightCurve;
+    [SerializeField]
+    private Gradient terranColorsGradient;
 
-	private Vector3[] vertices;
+    private Vector3[] vertices;
+    private Color[] colorMap;
 
-	private void Awake() {
+    private void Awake() {
 		Generate();
         UpdateMeshes();
-
     }
 
     private void UpdateMeshes()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(xSize + 1, zSize + 1, 0, 10, 2, 1, 1, new Vector2(0,0));
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        colorMap = new Color[(xSize + 1) * (zSize + 1)];
         for (int i = 0, z = 0; z <= zSize; z++)
         {
             for (int x = 0; x <= xSize; x++, i++)
             {
                 float currentHeight = noiseMap[x, z];
                 vertices[i] = new Vector3(x, currentHeight, z);
+                colorMap[i] = terranColorsGradient.Evaluate(currentHeight); //Take color from gradient
             }
         }
         mesh.vertices = vertices;
+        mesh.colors = colorMap;
     }
 
 	private void Generate() {
