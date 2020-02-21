@@ -10,10 +10,10 @@ public class CreatePlaneMesh : MonoBehaviour
 	private int xSize = 10;
     [SerializeField]
     private int zSize = 10;
-    [SerializeField]
-    private AnimationCurve meshHeightCurve;
-    [SerializeField]
-    private Gradient terranColorsGradient;
+
+    public AnimationCurve meshHeightCurve;
+
+	public Gradient terranColorsGradient;
 
     private Vector3[] vertices;
     private Color[] colorMap;
