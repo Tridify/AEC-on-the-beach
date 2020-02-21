@@ -40,6 +40,7 @@ public class CreatePlaneMesh : MonoBehaviour
         mesh.vertices = vertices;
         mesh.colors = colorMap;
 		mesh.RecalculateNormals();
+		mesh.RecalculateTangents();
 	}
 
 	private void Generate() {
