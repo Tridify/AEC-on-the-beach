@@ -39,7 +39,8 @@ public class CreatePlaneMesh : MonoBehaviour
         }
         mesh.vertices = vertices;
         mesh.colors = colorMap;
-    }
+		mesh.RecalculateNormals();
+	}
 
 	private void Generate() {
 		GetComponent<MeshFilter>().mesh = mesh = new Mesh();
@@ -47,14 +48,18 @@ public class CreatePlaneMesh : MonoBehaviour
 
 		vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 		Vector2[] uv = new Vector2[vertices.Length];
+		Vector4[] tangents = new Vector4[vertices.Length];
+		Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
 		for (int i = 0, z = 0; z <= zSize; z++) {
 			for (int x = 0; x <= xSize; x++, i++) {
 				vertices[i] = new Vector3(x, 0, z);
 				uv[i] = new Vector2((float)x / xSize, (float)z / zSize);
+				tangents[i] = tangent;
 			}
 		}
 		mesh.vertices = vertices;
 		mesh.uv = uv;
+		mesh.tangents = tangents;
 
 		int[] triangles = new int[xSize * zSize * 6];
 		for (int ti = 0, vi = 0, z = 0; z < zSize; z++, vi++) {
