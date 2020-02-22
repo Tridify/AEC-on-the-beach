@@ -43,6 +43,7 @@ public class CreatePlaneMesh : MonoBehaviour
         time += Time.deltaTime;
     }
 
+
     IEnumerator Build()
     {
         CCR.Checkhouses(mesh.vertices, mesh.normals, xSize, zSize);
@@ -50,8 +51,7 @@ public class CreatePlaneMesh : MonoBehaviour
         yield return null;
     }
 
-
-    private void UpdateMeshes(int[] heightMap)
+    private void UpdateMeshes(float[] heightMap)
     {
         int width = xSize;
         int height = zSize;
@@ -64,7 +64,7 @@ public class CreatePlaneMesh : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                positions[vertexIndex].y = heightMap[vertexIndex] / 10000000f;
+                positions[vertexIndex].y = heightMap[vertexIndex];
                 vertexIndex++;
             }
         }
