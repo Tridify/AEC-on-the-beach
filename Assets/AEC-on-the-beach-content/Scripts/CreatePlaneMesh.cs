@@ -20,19 +20,36 @@ public class CreatePlaneMesh : MonoBehaviour
     public CreateCubesRandomly CCR;
     public DepthView DV;
 
+
+    private float time = 0;
+    private float timeToBuild = 1;
+
     private void Awake() {
-        //DV.ConnectToTcpServer();
+        DV.ConnectToTcpServer();
         MeshData meshData = GenerateTerrainMesh();
         mesh = meshData.CreateMesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
-        CCR.CreateHouses(mesh.vertices, mesh.normals, xSize, zSize);
+        CCR.CreateHousesInBegin(mesh.vertices, mesh.normals, xSize, zSize);
     }
 
-    /*private void LateUpdate()
+    private void Update()
     {
         UpdateMeshes(DV.GetHeightMap());
-    }*/
+        if(time >= timeToBuild)
+        {
+            StartCoroutine("Build");
+            time = 0;
+        }
+        time += Time.deltaTime;
+    }
+
+    IEnumerator Build()
+    {
+        CCR.Checkhouses(mesh.vertices, mesh.normals, xSize, zSize);
+        Debug.Log("check");
+        yield return null;
+    }
+
 
     private void UpdateMeshes(int[] heightMap)
     {
