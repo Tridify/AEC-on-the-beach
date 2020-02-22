@@ -25,3 +25,43 @@ MonoBehaviour:
     m_SpecifySize: 1
     m_Name: TrackingTest
     m_Texture: {fileID: 2800000, guid: 74f4e97b585e74542ba9566a14bda8af, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5379565216880547076
+      m_GuidHigh: 3820471801109998750
+    m_SerializedTextureGuid:
+      m_GuidLow: 14831503610563226217
+      m_GuidHigh: 4654985990136240329
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: Red
+    m_Texture: {fileID: 2800000, guid: 008b6a6915f4cdd4c9987d4818d59940, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5698771459196661138
+      m_GuidHigh: 1577756828833053100
+    m_SerializedTextureGuid:
+      m_GuidLow: 13264412198258557817
+      m_GuidHigh: 17832786186063580890
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: Green
+    m_Texture: {fileID: 2800000, guid: cf8f4379a89db814da0ed0d78dc87af7, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5503136579627241109
+      m_GuidHigh: 12573633022331106971
+    m_SerializedTextureGuid:
+      m_GuidLow: 18186834927484414806
+      m_GuidHigh: 1318084420562755976
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: Blue
+    m_Texture: {fileID: 2800000, guid: 31602b569e02fc6488a19e07ccc64a12, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 4697365065054787972
+      m_GuidHigh: 7959752975729121168
+    m_SerializedTextureGuid:
+      m_GuidLow: 6698235204076196737
+      m_GuidHigh: 10304415453426519211
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: Purple
+    m_Texture: {fileID: 2800000, guid: e8fa5381e96d5cf4ab8c887f42a3008f, type: 3}
