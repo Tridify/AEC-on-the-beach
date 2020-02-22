@@ -120,6 +120,41 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &337299176 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5373212495162918258, guid: b141d17dbeebb624ba2a359213f5282e,
+    type: 3}
+  m_PrefabInstance: {fileID: 5373212494553447086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &337299181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337299176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82caf51eb83279846bcea944d6e1e554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &337299182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337299176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b0efb140cf7ab47bec95f917c9aba1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  houses: []
+  hs: {fileID: 0}
+  minDistance: 30
+  size: 200
+  amountOfHouses: 5
 --- !u!1 &1481878871
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,8 +322,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622510669}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.4366209, y: 0.2164411, z: -0.10907674, w: 0.866382}
+  m_LocalPosition: {x: 2.1800256, y: 8.758988, z: -2.1162357}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -361,5 +396,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Test
       objectReference: {fileID: 0}
+    - target: {fileID: 5373212495162918259, guid: b141d17dbeebb624ba2a359213f5282e,
+        type: 3}
+      propertyPath: DV
+      value: 
+      objectReference: {fileID: 337299181}
+    - target: {fileID: 5373212495162918259, guid: b141d17dbeebb624ba2a359213f5282e,
+        type: 3}
+      propertyPath: CCR
+      value: 
+      objectReference: {fileID: 337299182}
+    - target: {fileID: 5373212495162918259, guid: b141d17dbeebb624ba2a359213f5282e,
+        type: 3}
+      propertyPath: testTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: dae87e538d4b1e54c8ee818f4a9e7b74, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b141d17dbeebb624ba2a359213f5282e, type: 3}
