@@ -47,7 +47,6 @@ public class CreatePlaneMesh : MonoBehaviour
     IEnumerator Build()
     {
         CCR.Checkhouses(mesh.vertices, mesh.normals, xSize, zSize);
-        Debug.Log("check");
         yield return null;
     }
 
