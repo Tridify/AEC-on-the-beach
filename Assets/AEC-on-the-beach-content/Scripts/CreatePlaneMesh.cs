@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CreatePlaneMesh : MonoBehaviour
 {
 	private Mesh mesh;
 
-	[SerializeField]
-	private int xSize = 10;
-    [SerializeField]
-    private int zSize = 10;
+	private int xSize = 640;
+
+    private int zSize = 480;
 
     public AnimationCurve meshHeightCurve;
 
@@ -18,22 +18,37 @@ public class CreatePlaneMesh : MonoBehaviour
     private Vector3[] vertices;
     private Color[] colorMap;
 
+    public CreateCubesRandomly CCR;
+    public DepthView DV;
+
     private void Awake() {
+        DV.ConnectToTcpServer();
 		Generate();
-        UpdateMeshes();
     }
 
-    private void UpdateMeshes()
+    private void LateUpdate()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(xSize + 1, zSize + 1, 0, 10, 2, 1, 1, new Vector2(0,0));
+        UpdateMeshes(DV.GetHeightMap());
+    }
+
+    private void UpdateMeshes(int[] heightMap)
+    {
+        /*if (heightMap[22] != 0) {
+            Debug.Log(heightMap[22]);
+            Debug.Log("max "+heightMap.Max());
+            Debug.Log("min " + heightMap.Min());
+        }*/
+        //float[,] noiseMap = Noise.GenerateNoiseMap(xSize + 1, zSize + 1, 0, 10, 2, 1, 1, new Vector2(0,0));
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
         colorMap = new Color[(xSize + 1) * (zSize + 1)];
-        for (int i = 0, z = 0; z <= zSize; z++)
+
+        for (int i = 0, z = 0; z < zSize; z++)
         {
-            for (int x = 0; x <= xSize; x++, i++)
+            for (int x = 0; x < xSize; x++, i++)
             {
-                float currentHeight = noiseMap[x, z];
-                vertices[i] = new Vector3(x , currentHeight, z );
+                //Vector3 currPosition = vertices[i];
+                float currentHeight = heightMap[i];//noiseMap[x, z];
+                vertices[i] = new Vector3(x, currentHeight, z);
                 colorMap[i] = terranColorsGradient.Evaluate(currentHeight); //Take color from gradient
             }
         }
@@ -45,6 +60,7 @@ public class CreatePlaneMesh : MonoBehaviour
 
 	private void Generate() {
 		GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 		mesh.name = "Terrain";
 
 		vertices = new Vector3[(xSize + 1) * (zSize + 1)];

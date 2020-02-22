@@ -12,35 +12,32 @@ public class DepthView : MonoBehaviour
 {
     private Thread clientReceiveThread;
     private TcpClient socketConnection;
-    private byte[] bytes;
     private Texture2D tex;
-    private readonly int _byteCount = 640 * 480;
+    private readonly int _byteCount = 640 * 480 * 4;
+    const int pixels = 640 * 480;
+    private byte[] bytes = new byte[640 * 480 * 4];
+    private int[] heightMap = new int[pixels];
 
-    public void Start()
+    public int[] GetHeightMap()
     {
-        // Create a 16x16 texture with PVRTC RGBA4 format
-        // and fill it with raw PVRTC bytes.
-        tex = new Texture2D(640, 480, TextureFormat.R8, false);
-        // Raw PVRTC4 data for a 16x16 texture. This format is four bits
-        // per pixel, so data should be 16*16/2=128 bytes in size.
-        // Texture that is encoded here is mostly green with some angular
-        // blue and red lines.
+        return heightMap;
+    }
 
-        // Load data into the texture and upload it to the GPU.
-
-        // Assign texture to renderer's material.
-        bytes = new byte[_byteCount];
-
-        tex.LoadRawTextureData(bytes);
-        tex.Apply();
-        GetComponent<Renderer>().material.mainTexture = tex;
-        ConnectToTcpServer();
+    private int[] HeightInts(byte[] bytesFromSteam)
+    {
+        int[] output = new int[pixels];
+        for (int i = 0; i < pixels; i++)
+        {
+            int newHeight = BitConverter.ToInt32(bytesFromSteam, i*4);
+            output[i] = newHeight;
+        }
+        return output;
     }
 
     /// <summary>
     /// Setup socket connection.
     /// </summary>
-    private void ConnectToTcpServer()
+    public void ConnectToTcpServer()
     {
         try
         {
@@ -61,7 +58,7 @@ public class DepthView : MonoBehaviour
     {
         try
         {
-            socketConnection = new TcpClient("192.168.1.30", 8888);
+            socketConnection = new TcpClient("192.168.1.199", 8888);
             var receivedBytes = new Byte[_byteCount];
 
             using (NetworkStream stream = socketConnection.GetStream())
@@ -78,7 +75,8 @@ public class DepthView : MonoBehaviour
                     }
 
                     // Debug.Log("server message received as: " + Encoding.ASCII.GetString(receivedBytes));
-                    bytes = receivedBytes;
+                    heightMap = HeightInts(receivedBytes);
+                    //Debug.Log("got frame: "+ offset);
                 }
             }
         }
@@ -89,11 +87,6 @@ public class DepthView : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        tex.LoadRawTextureData(bytes);
-        tex.Apply();
-    }
 
     private void OnDestroy()
     {
