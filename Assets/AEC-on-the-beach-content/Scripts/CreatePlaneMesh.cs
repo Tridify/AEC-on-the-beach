@@ -56,6 +56,7 @@ public class CreatePlaneMesh : MonoBehaviour
         int height = zSize;
 
         int vertexIndex = 0;
+        Color[] colorMap = new Color[xSize * zSize];
 
         var positions = mesh.vertices;
 
@@ -64,11 +65,13 @@ public class CreatePlaneMesh : MonoBehaviour
             for (int x = 0; x < width; x++)
             {
                 positions[vertexIndex].y = heightMap[vertexIndex];
+                colorMap[vertexIndex] = terranColorsGradient.Evaluate(heightMap[vertexIndex] / 700f); //Take color from gradient
                 vertexIndex++;
             }
         }
 
         mesh.vertices = positions;
+        mesh.colors = colorMap;
     }
 
     public MeshData GenerateTerrainMesh()
