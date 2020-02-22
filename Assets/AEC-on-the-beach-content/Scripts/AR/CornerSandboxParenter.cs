@@ -32,7 +32,7 @@ public class CornerSandboxParenter : MonoBehaviour {
     private void Awake() {
         sandbox = GameObject.Find("Sandbox");
         // Get the only rotating object as parent
-        planeParent = transform.GetChild(0).transform.GetChild(0);
+        planeParent = transform.GetChild(0);
     }
 
     public void SetCornerTypeFromString(string name) {
@@ -75,22 +75,23 @@ public class CornerSandboxParenter : MonoBehaviour {
 
     public void AssignOffset() {
         float sideOffset = (sandboxSideLength * 0.5f) + (qrCodeSideLength * 0.5f);
-        float heightOffset = -sandboxHeight;
+        float heightOffset = -(sandboxHeight * 0.5f);
+        //float heightOffset = 0;
         switch (cornerType) {
             case CornerType.Red:
-                sandboxOffset = new Vector3(-sideOffset, heightOffset, sideOffset); //Lower Right
+                sandboxOffset = new Vector3(sideOffset, heightOffset, -sideOffset); //Lower Right
                 break;
             case CornerType.Green:
                 sandboxOffset = new Vector3(sideOffset, heightOffset, -sideOffset); //Upper Left
                 break;
             case CornerType.Blue:
-                sandboxOffset = new Vector3(sideOffset, heightOffset, sideOffset); //Upper Right
+                sandboxOffset = new Vector3(-sideOffset, heightOffset, -sideOffset); //Upper Right
                 break;
             case CornerType.Purple:
-                sandboxOffset = new Vector3(-sideOffset, heightOffset, -sideOffset); //Lower Left
+                sandboxOffset = new Vector3(sideOffset, heightOffset, sideOffset); //Lower Left
                 break;
             default:
-                sandboxOffset = new Vector3(-sideOffset, heightOffset, sideOffset); //Lower Right
+                sandboxOffset = new Vector3(sideOffset, heightOffset, -sideOffset); //Lower Right
                 break;
         }
     }
@@ -98,7 +99,7 @@ public class CornerSandboxParenter : MonoBehaviour {
     public void SetSandboxAsChild() {
         if(sandbox.transform.parent != planeParent) {
             sandbox.transform.SetParent(planeParent);
-            sandbox.transform.rotation = Quaternion.identity;
+            sandbox.transform.localRotation = Quaternion.identity;
             sandbox.transform.localPosition = Vector3.zero;
             sandbox.transform.Translate(sandboxOffset);
         }

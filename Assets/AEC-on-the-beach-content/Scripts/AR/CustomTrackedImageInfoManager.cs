@@ -31,12 +31,16 @@ public class CustomTrackedImageInfoManager : MonoBehaviour {
     ARTrackedImageManager m_TrackedImageManager;
 
 
+
     private List<CornerSandboxParenter> m_parenters = new List<CornerSandboxParenter>();
 
+    private ARTrackedImage[] m_arImages = new ARTrackedImage[0];
 
     void Awake() {
         m_MainCamera = Camera.main;
         m_TrackedImageManager = GetComponent<ARTrackedImageManager>();
+
+        InvokeRepeating("CheckForReparenting", 1.0f, 1.0f);
     }
 
     void OnEnable() {
@@ -74,23 +78,36 @@ public class CustomTrackedImageInfoManager : MonoBehaviour {
         }
     }
 
-    void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs) {
-        foreach (var trackedImage in eventArgs.added) {
-            UpdateInfo(trackedImage, trackedImage.referenceImage.texture);
-        }
+    private bool isVisibleOnScreen(Vector3 position) {
 
+        return (position.z > 0 && (position.x < 1 && position.x > 0) && (position.y < 1 && position.y > 0));
+    }
+
+    void CheckForReparenting() {
         float closestDistance = float.MaxValue;
-        int closestIndex = 0;
-        int len = eventArgs.updated.Count;
-        for (int i = 0; i < len; i++) {
+        int closestIndex = -1;
+        for (int i = 0; i < m_arImages.Length; i++) {
 
-            UpdateInfo(eventArgs.updated[i]);
-            float currDistance = Vector3.SqrMagnitude(m_MainCamera.transform.position - eventArgs.updated[i].transform.position);
-            if (currDistance < closestDistance) {
+            float currDistance = Vector3.SqrMagnitude(m_MainCamera.transform.position - m_arImages[i].transform.position);
+            Vector3 screenPosition = m_MainCamera.WorldToViewportPoint(m_arImages[i].transform.position);
+            if (isVisibleOnScreen(screenPosition) && currDistance < closestDistance) {
                 closestDistance = currDistance;
                 closestIndex = i;
             }
         }
-        m_parenters[closestIndex].SetSandboxAsChild();
+        if(closestIndex > 0) {
+            m_parenters[closestIndex].SetSandboxAsChild();
+        }
+    }
+
+    void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs) {
+
+        m_arImages = eventArgs.updated.ToArray();
+
+        foreach (var trackedImage in eventArgs.added) {
+            UpdateInfo(trackedImage, trackedImage.referenceImage.texture);
+        }
+
+     
     }
 }
