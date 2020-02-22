@@ -151,10 +151,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   houses: []
-  hs: {fileID: 0}
-  minDistance: 30
-  size: 200
-  amountOfHouses: 5
+  hs:
+  - {fileID: 1967739668683372600, guid: dea53b690a85fdd45951fad21ac37b71, type: 3}
+  - {fileID: 3462860330229263219, guid: bdf843647fa7c1447a2f80a3f19dca40, type: 3}
+  - {fileID: 1967739668683372600, guid: dea53b690a85fdd45951fad21ac37b71, type: 3}
+  - {fileID: 4316087703272750805, guid: 3bf56ce34f0d84846bbdf6f6f9d2badb, type: 3}
+  minDistance: 5
+  amountOfHouses: 10
 --- !u!1 &1481878871
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,16 +21,18 @@ public class CreatePlaneMesh : MonoBehaviour
     public DepthView DV;
 
     private void Awake() {
-        DV.ConnectToTcpServer();
+        //DV.ConnectToTcpServer();
         MeshData meshData = GenerateTerrainMesh();
         mesh = meshData.CreateMesh();
         GetComponent<MeshFilter>().mesh = mesh;
+
+        CCR.CreateHouses(mesh.vertices, mesh.normals, xSize, zSize);
     }
 
-    private void LateUpdate()
+    /*private void LateUpdate()
     {
         UpdateMeshes(DV.GetHeightMap());
-    }
+    }*/
 
     private void UpdateMeshes(int[] heightMap)
     {
