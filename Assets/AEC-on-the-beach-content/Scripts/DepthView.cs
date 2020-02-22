@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -15,21 +17,48 @@ public class DepthView : MonoBehaviour
     private Texture2D tex;
     const int Pixels = 640 * 480;
     const int ByteCount = Pixels * BytesDepth;
-    private const int BytesDepth = 3;
-    private int[] heightMap = new int[Pixels];
-    private byte[] receivedBytes = new Byte[ByteCount +1];
+    private const int BytesDepth = 4;
+    private const float MinDepth = 300f;
+    private const float MaxDepth = 1100f;
+    private float[] heightMap = new float[Pixels];
+    private byte[] receivedBytes = new Byte[ByteCount];
+    private Queue<int[]> buffer = new Queue<int[]>();
+    private int FramesToAverageTarget = 1;
 
-    public int[] GetHeightMap()
+    public float[] GetHeightMap()
     {
+        if (buffer.Count == 0) return heightMap;
+        var framesToAverage = Math.Min(FramesToAverageTarget, buffer.Count);
+
+        var frames = buffer.Take(framesToAverage).ToArray();
+
+        for (int i = 0; i < Pixels; i++)
+        {
+            double depth = 0;
+            for (int f = 0; f < framesToAverage; f++)
+            {
+                depth += frames[f][i];
+            }
+
+            heightMap[i] = MaxDepth - ((float) (depth / (framesToAverage)) - MinDepth);
+        }
         return heightMap;
     }
 
     private int[] HeightInts(byte[] bytesFromSteam)
     {
         int[] output = new int[Pixels];
+        byte[] pixelBytes = new byte[BytesDepth];
         for (int i = 0; i < Pixels; i++)
         {
-            int newHeight = BitConverter.ToInt32(bytesFromSteam, i*BytesDepth);
+            Array.Copy(bytesFromSteam, i * BytesDepth, pixelBytes, 0, BytesDepth);
+
+            int newHeight = BitConverter.ToInt32(pixelBytes, 0);
+            if (newHeight == 0)
+            {
+                newHeight = (int)MaxDepth;
+            }
+
             output[i] = newHeight;
         }
         return output;
@@ -75,9 +104,8 @@ public class DepthView : MonoBehaviour
                         offset += length;
                     }
 
-                    //Debug.Log("received " + receivedBytes.Length);
-                    heightMap = HeightInts(receivedBytes);
-                    //Debug.Log("got frame: "+ offset);
+                    buffer.Enqueue(HeightInts(receivedBytes));
+                    while (buffer.Count > 10) buffer.Dequeue();
                 }
             }
         }
