@@ -8,7 +8,6 @@ public class CreatePlaneMesh : MonoBehaviour
 	private Mesh mesh;
 
 	private int xSize = 640;
-
     private int zSize = 480;
 
     public AnimationCurve meshHeightCurve;
@@ -23,7 +22,9 @@ public class CreatePlaneMesh : MonoBehaviour
 
     private void Awake() {
         DV.ConnectToTcpServer();
-		Generate();
+        MeshData meshData = GenerateTerrainMesh();
+        mesh = meshData.CreateMesh();
+        GetComponent<MeshFilter>().mesh = mesh;
     }
 
     private void LateUpdate()
@@ -33,61 +34,82 @@ public class CreatePlaneMesh : MonoBehaviour
 
     private void UpdateMeshes(int[] heightMap)
     {
-        /*if (heightMap[22] != 0) {
-            Debug.Log(heightMap[22]);
-            Debug.Log("max "+heightMap.Max());
-            Debug.Log("min " + heightMap.Min());
-        }*/
-        //float[,] noiseMap = Noise.GenerateNoiseMap(xSize + 1, zSize + 1, 0, 10, 2, 1, 1, new Vector2(0,0));
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-        colorMap = new Color[(xSize + 1) * (zSize + 1)];
+        int width = xSize;
+        int height = zSize;
 
-        for (int i = 0, z = 0; z < zSize; z++)
+        int vertexIndex = 0;
+
+        var positions = mesh.vertices;
+
+        for (int z = 0; z < height; z++)
         {
-            for (int x = 0; x < xSize; x++, i++)
+            for (int x = 0; x < width; x++)
             {
-                //Vector3 currPosition = vertices[i];
-                float currentHeight = heightMap[i] / 10000000f;//noiseMap[x, z];
-                vertices[i] = new Vector3(x, currentHeight, z);
-                colorMap[i] = terranColorsGradient.Evaluate(currentHeight); //Take color from gradient
+                positions[vertexIndex].y = heightMap[vertexIndex] / 10000000f;
+                vertexIndex++;
             }
         }
-        mesh.vertices = vertices;
-        mesh.colors = colorMap;
-		mesh.RecalculateNormals();
-		mesh.RecalculateTangents();
-	}
 
-	private void Generate() {
-		GetComponent<MeshFilter>().mesh = mesh = new Mesh();
-        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-		mesh.name = "Terrain";
+        mesh.vertices = positions;
+    }
 
-		vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-		Vector2[] uv = new Vector2[vertices.Length];
-		Vector4[] tangents = new Vector4[vertices.Length];
-		Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
-		for (int i = 0, z = 0; z <= zSize; z++) {
-			for (int x = 0; x <= xSize; x++, i++) {
-				vertices[i] = new Vector3(x, 0, z);
-				uv[i] = new Vector2((float)x / xSize, (float)z / zSize);
-				tangents[i] = tangent;
-			}
-		}
-		mesh.vertices = vertices;
-		mesh.uv = uv;
-		mesh.tangents = tangents;
+    public MeshData GenerateTerrainMesh()
+    {
+        int width = xSize;
+        int height = zSize;
 
-		int[] triangles = new int[xSize * zSize * 6];
-		for (int ti = 0, vi = 0, z = 0; z < zSize; z++, vi++) {
-			for (int x = 0; x < xSize; x++, ti += 6, vi++) {
-				triangles[ti] = vi;
-				triangles[ti + 3] = triangles[ti + 2] = vi + 1;
-				triangles[ti + 4] = triangles[ti + 1] = vi + xSize + 1;
-				triangles[ti + 5] = vi + xSize + 2;
-			}
-		}
-		mesh.triangles = triangles;
-		mesh.RecalculateNormals();
-	}
+        MeshData meshData = new MeshData(width, height);
+        int vertexIndex = 0;
+
+        for (int z = 0; z < height; z++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                meshData.vertices[vertexIndex] = new Vector3(x, 0, z);
+                if (x < width - 1 && z < height - 1)
+                {
+                    meshData.AddTriangle(vertexIndex + width, vertexIndex + width + 1, vertexIndex);
+                    meshData.AddTriangle(vertexIndex + 1, vertexIndex, vertexIndex + width + 1);
+                }
+                vertexIndex++;
+            }
+        }
+        return meshData;
+    }
+
+    public class MeshData
+    {
+        public Vector3[] vertices;
+        public int[] triangles;
+        public Color[] colors;
+        public Vector2 size;
+
+        int triangleIndex;
+
+        public MeshData(int meshWidth, int meshHeight)
+        {
+            size = new Vector2(meshWidth, meshHeight);
+            vertices = new Vector3[meshWidth * meshHeight];
+            triangles = new int[meshWidth * meshHeight * 6];
+        }
+        public void AddTriangle(int a, int b, int c)
+        {
+            triangles[triangleIndex] = a;
+            triangles[triangleIndex + 1] = b;
+            triangles[triangleIndex + 2] = c;
+            triangleIndex += 3;
+        }
+
+        public Mesh CreateMesh()
+        {
+            Mesh mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            mesh.name = "terrain";
+            mesh.vertices = vertices;
+            mesh.triangles = triangles;
+            mesh.colors = colors;
+            mesh.RecalculateNormals();
+            return mesh;
+        }
+    }
 }
