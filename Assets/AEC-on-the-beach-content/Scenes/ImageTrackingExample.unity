@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_WorldSpaceCanvasCamera: {fileID: 1247506530}
-  m_DefaultTexture: {fileID: 2800000, guid: 7b10ebfe4ca64e347aeb9dc3befa5bf6, type: 3}
+  m_DefaultTexture: {fileID: 2800000, guid: 74f4e97b585e74542ba9566a14bda8af, type: 3}
 --- !u!1 &1247506529
 GameObject:
   m_ObjectHideFlags: 0
