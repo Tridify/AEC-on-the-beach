@@ -13,10 +13,11 @@ public class DepthView : MonoBehaviour
     private Thread clientReceiveThread;
     private TcpClient socketConnection;
     private Texture2D tex;
-    private readonly int _byteCount = 640 * 480 * 4;
-    const int pixels = 640 * 480;
-    private byte[] bytes = new byte[640 * 480 * 4];
-    private int[] heightMap = new int[pixels];
+    const int Pixels = 640 * 480;
+    const int ByteCount = Pixels * BytesDepth;
+    private const int BytesDepth = 3;
+    private int[] heightMap = new int[Pixels];
+    private byte[] receivedBytes = new Byte[ByteCount +1];
 
     public int[] GetHeightMap()
     {
@@ -25,10 +26,10 @@ public class DepthView : MonoBehaviour
 
     private int[] HeightInts(byte[] bytesFromSteam)
     {
-        int[] output = new int[pixels];
-        for (int i = 0; i < pixels; i++)
+        int[] output = new int[Pixels];
+        for (int i = 0; i < Pixels; i++)
         {
-            int newHeight = BitConverter.ToInt32(bytesFromSteam, i*4);
+            int newHeight = BitConverter.ToInt32(bytesFromSteam, i*BytesDepth);
             output[i] = newHeight;
         }
         return output;
@@ -39,6 +40,7 @@ public class DepthView : MonoBehaviour
     /// </summary>
     public void ConnectToTcpServer()
     {
+        Debug.Log("bytes per frame "+ByteCount);
         try
         {
             clientReceiveThread = new Thread(new ThreadStart(ListenForData));
@@ -58,8 +60,7 @@ public class DepthView : MonoBehaviour
     {
         try
         {
-            socketConnection = new TcpClient("192.168.1.199", 8888);
-            var receivedBytes = new Byte[_byteCount];
+            socketConnection = new TcpClient("192.168.1.30", 8888);
 
             using (NetworkStream stream = socketConnection.GetStream())
             {
@@ -69,12 +70,12 @@ public class DepthView : MonoBehaviour
                     int length;
                     int offset = 0;
                     // Read one frame of bytes.length
-                    while ((length = stream.Read(receivedBytes, offset, bytes.Length - offset)) != 0)
+                    while ((length = stream.Read(receivedBytes, offset, ByteCount - offset)) != 0)
                     {
                         offset += length;
                     }
 
-                    // Debug.Log("server message received as: " + Encoding.ASCII.GetString(receivedBytes));
+                    //Debug.Log("received " + receivedBytes.Length);
                     heightMap = HeightInts(receivedBytes);
                     //Debug.Log("got frame: "+ offset);
                 }
