@@ -44,6 +44,7 @@ public class CustomTrackedImageInfoManager : MonoBehaviour {
     }
 
     void OnEnable() {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         m_TrackedImageManager.trackedImagesChanged += OnTrackedImagesChanged;
     }
 
