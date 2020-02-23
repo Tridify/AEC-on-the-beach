@@ -28,7 +28,7 @@ public class CreatePlaneMesh : MonoBehaviour
     public float bldgAspectRatio;   //  Ratio of the Height to the Parcel Size.
     public float elevationTolerance;   // High gain value for filtering bad elevation data.
     public float maxElevationDelta;     //  Value for the max expected real Unity-scale difference between high and low;
-
+    public Vector3 lowHighAverage; 
     public Building[] Buildings;
 
     private float time = 0;
@@ -37,6 +37,8 @@ public class CreatePlaneMesh : MonoBehaviour
     private float[] _testData;
 
     private void Awake() {
+
+        _useDebugData = true;
 
         if (_useDebugData)
         {
@@ -54,17 +56,19 @@ public class CreatePlaneMesh : MonoBehaviour
         mesh = meshData.CreateMesh();
         GetComponent<MeshFilter>().mesh = mesh;
         //CCR.CreateHousesInBegin(mesh.vertices, mesh.normals, xSize, zSize);
-        //CCR.CreateHousesInBegin(mesh.vertices, mesh.normals, xSize, zSize);
 
         //  Procedural City Variables
         gridPointsPerParcel = 10;
-        separation = 0.2f;
+        separation = 1f;
         scale = 0.02f;
-        bldgAspectRatio = 3f;
+        bldgAspectRatio = 1f;
         elevationTolerance = 1f;
         maxElevationDelta = 0.1f;  // Figure 10 centimeters;
 
         UpdateMeshes(DV.GetHeightMap());
+        //lowHighAverage = CharacterizeMesh();
+        Debug.Log(lowHighAverage);
+
         PlaceCity();
     }
 
@@ -214,6 +218,7 @@ public class CreatePlaneMesh : MonoBehaviour
                 Building bldg = go.AddComponent<Building>();
                 bldg.size = gridPointsPerParcel * scale;
                 bldg.height = gridPointsPerParcel * scale * bldgAspectRatio;
+                go.name = bldgName;
 
                 /*
 
@@ -280,5 +285,26 @@ public class CreatePlaneMesh : MonoBehaviour
             return result;
         }
 
+    public Vector3 CharacterizeMesh()
+    {
+        float sum = 0;
+        int err = 0;
+        float high = 0;
+        float low = 0;
+
+        for (var i = 0; i < mesh.vertices.Length; i++)
+        {
+            if (mesh.vertices[i].y == 0) err++;
+            else
+            {
+                sum += mesh.vertices[i].y;
+                if (mesh.vertices[i].y < low) low = mesh.vertices[i].y;
+                if (mesh.vertices[i].y > high) high = mesh.vertices[i].y;
+            }
+
+        }
+        Vector3 result = new Vector3(low, high, sum / mesh.vertices.Length - err);
+        return result;
+    }
 }
 
