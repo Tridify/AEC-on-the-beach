@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/AEC-on-the-beach-content/Scenes/Debug/WriteImagesToConsole.unity
-    guid: 7e936f2d31af838488b83bb05a870590
+    path: Assets/AEC-on-the-beach-content/Scenes/AECOnTheBeach.unity
+    guid: fe0342b29a997d641bed68d9557a8ea5
   m_configObjects:
     com.unity.xr.arkit.PlayerSettings: {fileID: 11400000, guid: 2d5fb8e61571b4e3897f221189089fd6,
       type: 2}

@@ -75,7 +75,7 @@ public class CornerSandboxParenter : MonoBehaviour {
 
     public void AssignOffset() {
         float sideOffset = (sandboxSideLength * 0.5f) + (qrCodeSideLength * 0.5f);
-        float heightOffset = -(sandboxHeight * 0.5f);
+        float heightOffset = -(sandboxHeight * 0.25f);
         //float heightOffset = 0;
         switch (cornerType) {
             case CornerType.Red:
@@ -105,12 +105,19 @@ public class CornerSandboxParenter : MonoBehaviour {
         }
     }
 
+    private void Unparent() {
+        if (sandbox.transform.parent != planeParent) {
+            sandbox.transform.SetParent(transform.parent);
+        }
+    }
+
     void Update() {
         if (Input.touchCount >= 2) {
             if ((Input.touches[0].phase == TouchPhase.Began) || (Input.touches[1].phase == TouchPhase.Began)) {
                 string name = GetName();
                 Debug.Log(name + " parentName:" + transform.parent.name);
                 Debug.Log(name + " position:" + transform.position);
+                Unparent();
             }
         }
     }
