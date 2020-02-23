@@ -509,5 +509,11 @@ PrefabInstance:
       propertyPath: terranColorsGradient.ctime1
       value: 56283
       objectReference: {fileID: 0}
+    - target: {fileID: 5373212495162918259, guid: b141d17dbeebb624ba2a359213f5282e,
+        type: 3}
+      propertyPath: prefab_building_builder
+      value: 
+      objectReference: {fileID: 5519813161491407871, guid: 2e65f1961dfef5541ab8e8dfeb244d93,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b141d17dbeebb624ba2a359213f5282e, type: 3}
