@@ -38,8 +38,6 @@ public class CreatePlaneMesh : MonoBehaviour
 
     private void Awake() {
 
-        _useDebugData = true;
-
         if (_useDebugData)
         {
             _testData = Noise.GenerateNoiseMap(640, 480, 234561345, 100f, 1, 1, 1, Vector2.zero)
@@ -88,18 +86,12 @@ public class CreatePlaneMesh : MonoBehaviour
 
         if(time >= timeToBuild)
         {
-            StartCoroutine("Build");
+            CCR.Checkhouses(mesh.vertices, mesh.normals, Buildings);
             time = 0;
         }
         time += Time.deltaTime;
     }
 
-
-    IEnumerator Build()
-    {
-        CCR.Checkhouses(mesh.vertices, mesh.normals, xSize, zSize);
-        yield return null;
-    }
 
     private void UpdateMeshes(float[] heightMap)
     {
@@ -123,6 +115,7 @@ public class CreatePlaneMesh : MonoBehaviour
 
         mesh.vertices = positions;
         mesh.colors = colorMap;
+        mesh.RecalculateNormals();
     }
 
     public MeshData GenerateTerrainMesh()
@@ -209,9 +202,8 @@ public class CreatePlaneMesh : MonoBehaviour
             {
     
             int refID = Mathf.FloorToInt(Mathf.FloorToInt(loc.z / zSize / scale) * zSize + Mathf.FloorToInt(loc.x  / scale));
-            Debug.Log(refID);
 
-            loc.y = _testData[refID] * scale;
+            loc.y = 0f;//_testData[refID] * scale;
 
             Vector3 center = transform.position + loc;
                 string bldgName = "Building" + MeshIndex;
@@ -222,8 +214,8 @@ public class CreatePlaneMesh : MonoBehaviour
                 go.AddComponent<MeshFilter>();
 
                 Building bldg = go.AddComponent<Building>();
-                bldg.size = gridPointsPerParcel * scale;
-                bldg.height = gridPointsPerParcel * scale * bldgAspectRatio;
+            bldg.size = Random.Range(0.1f, 0.15f);//gridPointsPerParcel * scale;
+            bldg.height = 0.001f;//gridPointsPerParcel * scale * bldgAspectRatio;
                 go.name = bldgName;
 
                 /*

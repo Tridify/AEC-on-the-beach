@@ -5,86 +5,33 @@ using UnityEngine;
 public class CreateCubesRandomly : MonoBehaviour
 {
     [SerializeField]
-    private List<GameObject> building = new List<GameObject>();
-
-    public GameObject[] hs;
+    private int heightLimit = 1000;
     [SerializeField]
-    private float minDistance = 10;
-    [SerializeField]
-    private int amountOfHouses = 20;
+    private int lowLimit = 600;
 
-    private Vector3 FindNewPos(Vector3 vertices, float xPos, float zPos)
+
+    public void Checkhouses(Vector3[] vertices, Vector3[] normals, Building[] buildings)
     {
-        Vector3 newPos = new Vector3(xPos, vertices.y, zPos);
-        Collider[] neighbours = Physics.OverlapSphere(newPos, minDistance);
-        if (neighbours.Length > 0)
+
+        for (int z = 0; z < 32; z++)
         {
-            return Vector3.zero;
-        }else
-        {
-            return newPos;
-        }
-    }
- 
-    public void CreateHousesInBegin(Vector3[] vertices, Vector3[] normals, int xSize, int zSize)
-    {
-        int index = 0;
-        for (int a = 0; a < amountOfHouses; a++)
-        {
-            Vector3 newPos = Vector3.zero;
-            int indexerOfCVertice;
-            do
+            for (int x = 0; x < 24; x++)
             {
-                int row = (int)Random.Range(15, xSize - 15);
-                int zPos = (int)Random.Range(15, zSize - 15);
-                indexerOfCVertice = row * zSize + zPos;
-                float angle = Vector3.Dot(Vector3.up, normals[indexerOfCVertice]);  //check if vertes is flat
-                if (angle >= 0.8f)
+                var buildingIndex = z * 24 + x;
+                var meshIndex = z * (640 / 32) * 480 + x * (480 / 24);
+                var b = buildings[buildingIndex];
+                float height = vertices[meshIndex].y;
+                if (height >= lowLimit && height <= heightLimit)
                 {
-                    newPos = FindNewPos(vertices[indexerOfCVertice], row, zPos);
+                    var pos = vertices[meshIndex];
+                    b.transform.position = pos * 0.02f;
+                    b.gameObject.SetActive(true);
                 }
-
-            } while (newPos == Vector3.zero);
-
-            GameObject newObject = Instantiate(hs[index], newPos*0.02f, transform.rotation);
-            newObject.GetComponent<HouseInfo>().indexOfVertice = indexerOfCVertice;
-            newObject.GetComponent<HouseInfo>().heightNow = vertices[indexerOfCVertice].y;
-            building.Add(newObject);
-            index++;
-            if(index >= hs.Length)
-            {
-                index = 0;
-            }
-        }
-    }
-
-
-    public void Checkhouses(Vector3[] vertices, Vector3[] normals, int xSize, int zSize)
-    {
-        foreach (GameObject b in building)
-        {
-            Vector3 newPos = Vector3.zero;
-            int indexerOfCVertice;
-            if (b.GetComponent<HouseInfo>().heightNow == vertices[b.GetComponent<HouseInfo>().indexOfVertice].y && Vector3.Dot(Vector3.up, normals[b.GetComponent<HouseInfo>().indexOfVertice]) >= 0.8f)
-            {
-                
-            }else
-            {
-                do
+                else
                 {
-                    int row = (int)Random.Range(15, xSize - 15);
-                    int zPos = (int)Random.Range(15, zSize - 15);
-                    indexerOfCVertice = row * zSize + zPos;
-                    float angle = Vector3.Dot(Vector3.up, normals[indexerOfCVertice]);  //check if vertes is flat
-                    if (angle >= 0.8f)
-                    {
-                        newPos = FindNewPos(vertices[indexerOfCVertice], row, zPos);
-                    }
-                } while (newPos == Vector3.zero);
-                b.transform.position = newPos * 0.02f;
-                b.GetComponent<HouseInfo>().heightNow = vertices[indexerOfCVertice].y;
-                b.GetComponent<HouseInfo>().indexOfVertice = indexerOfCVertice;
-            }   
+                    b.gameObject.SetActive(false);
+                }
+            }
         }
     }
 }

@@ -26,8 +26,8 @@ public class Building : MonoBehaviour
         isBoring = true;
 
         float h_low = 0f;
-        float h_high = Random.Range(0.75f, 1.5f);
-        h_high = height;
+        float h_high = Random.Range(0.01f, 0.1f);
+        //h_high = height;
           
         ///  ##  ELIMINATE FOOTPRINT VARIABILITY. 
         //Vector3 footprint = new Vector3(Random.Range(1f, 3f), 0f, Random.Range(1f, 3f));
@@ -48,7 +48,7 @@ public class Building : MonoBehaviour
             BuildOff3DTrap(h_high, footprint_next);
 
             h_low = h_high;
-            h_high = h_high + Random.Range(0.5f, 1.5f);
+            h_high = h_high + Random.Range(0.05f, 0.2f);
             footprint = footprint_next;
             one_extrusion = !one_extrusion;
         }
