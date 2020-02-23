@@ -23,7 +23,7 @@ public class DepthView : MonoBehaviour
     private float[] heightMap = new float[Pixels];
     private byte[] receivedBytes = new Byte[ByteCount];
     private Queue<int[]> buffer = new Queue<int[]>();
-    private int FramesToAverageTarget = 1;
+    private int FramesToAverageTarget = 5;
 
     public float[] GetHeightMap()
     {
@@ -119,7 +119,7 @@ public class DepthView : MonoBehaviour
 
     private void OnDestroy()
     {
-        clientReceiveThread.Abort();
-        socketConnection.Close();
+        clientReceiveThread?.Abort();
+        socketConnection?.Close();
     }
 }

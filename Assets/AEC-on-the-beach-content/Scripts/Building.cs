@@ -43,7 +43,7 @@ public class Building : MonoBehaviour
           for (int i = 0; i < 3; i++)
 
             {
-                Vector3 footprint_next = (one_extrusion ? footprint : new Vector3(init_footprint.x * Random.Range(0.5f, 1f), 0f, init_footprint.z * Random.Range(0.5f, 1f)));
+                Vector3 footprint_next = (one_extrusion ? footprint : new Vector3(init_footprint.x * Random.Range(0.9f, 1.1f), 0f, init_footprint.z * Random.Range(0.5f, 1f)));
 
             BuildOff3DTrap(h_high, footprint_next);
 
@@ -54,7 +54,7 @@ public class Building : MonoBehaviour
         }
 
 //        Fill3DTrap(h_low, h_low + Random.value * Random.value * Random.Range(0.5f, 1.5f), footprint, Vector3.zero);
-        Fill3DTrap(h_low, h_low + Random.value * Random.value * Random.Range(0.5f, 1.5f) * 0.2f, footprint, Vector3.zero);
+        Fill3DTrap(h_low, h_low + Random.value * Random.value * Random.Range(0.9f, 1.1f), footprint, Vector3.zero);
 
         Export();
     }
@@ -142,7 +142,7 @@ public class Building : MonoBehaviour
         m.vertices = v.ToArray();
         m.triangles = t.ToArray();
         //mr.materials = new Material[] { Resources.Load("Materials/MAT_BUILD_TRIM_" + Random.Range (0, 6).ToString()) as Material };
-        mr.materials = new Material[] { Resources.Load("Materials/m_0") as Material };
+        mr.materials = new Material[] { Resources.Load("Materials/m_" + Random.Range(0,8)) as Material };
 
         m.RecalculateNormals();
         mf.mesh = m;

@@ -38,7 +38,6 @@ public class CreatePlaneMesh : MonoBehaviour
 
     private void Awake() {
 
-        
         if (_useDebugData)
         {
             _testData = Noise.GenerateNoiseMap(640, 480, 234561345, 100f, 1, 1, 1, Vector2.zero)
@@ -67,9 +66,6 @@ public class CreatePlaneMesh : MonoBehaviour
 
         UpdateMeshes(DV.GetHeightMap());
         PlaceCity();
-
-
-
     }
 
     private void Update()
