@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class CreatePlaneMesh : MonoBehaviour
 {
 	private Mesh mesh;
+    private bool _useDebugData = false;
 
 	private int xSize = 640;
     private int zSize = 480;
@@ -24,8 +26,21 @@ public class CreatePlaneMesh : MonoBehaviour
     private float time = 0;
     private float timeToBuild = 1;
 
+    private float[] _testData;
+
     private void Awake() {
-        DV.ConnectToTcpServer();
+
+        if (_useDebugData)
+        {
+            _testData = Noise.GenerateNoiseMap(640, 480, 234561345, 100f, 1, 1, 1, Vector2.zero)
+                .Select(d => d * 200f + 300f)
+                .ToArray();
+            Debug.Log("min " + _testData.Min() + " max " + _testData.Max());
+        }
+        else
+        {
+            DV.ConnectToTcpServer();
+        }
         MeshData meshData = GenerateTerrainMesh();
         mesh = meshData.CreateMesh();
         GetComponent<MeshFilter>().mesh = mesh;
@@ -34,7 +49,18 @@ public class CreatePlaneMesh : MonoBehaviour
 
     private void Update()
     {
-        UpdateMeshes(DV.GetHeightMap());
+        float[] heightMap;
+        if (_useDebugData)
+        {
+            heightMap = _testData;
+        }
+        else
+        {
+            heightMap = DV.GetHeightMap();
+        }
+
+        UpdateMeshes(heightMap);
+
         if(time >= timeToBuild)
         {
             StartCoroutine("Build");
