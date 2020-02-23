@@ -198,7 +198,7 @@ public class CreatePlaneMesh : MonoBehaviour
                 for (int x = 0; x < gridX; x++)
                 {
                     Vector3 offset = new Vector3(x * realOffset + gridPointsPerParcel * scale / 2, 0f, z * realOffset + gridPointsPerParcel * scale / 2);
-                    Buildings[z * gridX + x] = PlaceBuildingSingle(offset, Mathf.RoundToInt(x * realOffset + gridPointsPerParcel / 2 + z * realOffset + gridPointsPerParcel / 2));
+                    Buildings[z * gridX + x] = PlaceBuildingSingle(offset, Mathf.RoundToInt(z * realOffset + gridPointsPerParcel / 2 + x * realOffset + gridPointsPerParcel / 2));
                 }
             }
 
@@ -207,7 +207,13 @@ public class CreatePlaneMesh : MonoBehaviour
             /// </summary>
             Building PlaceBuildingSingle(Vector3 loc, int MeshIndex)
             {
-                Vector3 center = transform.position + loc;
+    
+            int refID = Mathf.FloorToInt(Mathf.FloorToInt(loc.z / zSize / scale) * zSize + Mathf.FloorToInt(loc.x  / scale));
+            Debug.Log(refID);
+
+            loc.y = _testData[refID] * scale;
+
+            Vector3 center = transform.position + loc;
                 string bldgName = "Building" + MeshIndex;
 
                 GameObject go = new GameObject();
