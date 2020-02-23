@@ -30,6 +30,8 @@ public class CreatePlaneMesh : MonoBehaviour
     public float maxElevationDelta;     //  Value for the max expected real Unity-scale difference between high and low;
     public Vector3 lowHighAverage; 
     public Building[] Buildings;
+    public float heightColorScale = 1 / 700f;
+    public float heightColorOffset = -500f;
 
     private float time = 0;
     private float timeToBuild = 1;
@@ -108,7 +110,7 @@ public class CreatePlaneMesh : MonoBehaviour
             for (int x = 0; x < width; x++)
             {
                 positions[vertexIndex].y = heightMap[vertexIndex];
-                colorMap[vertexIndex] = terranColorsGradient.Evaluate(heightMap[vertexIndex] / 700f); //Take color from gradient
+                colorMap[vertexIndex] = terranColorsGradient.Evaluate((heightMap[vertexIndex] + heightColorOffset) * heightColorScale); //Take color from gradient
                 vertexIndex++;
             }
         }
