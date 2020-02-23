@@ -155,6 +155,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cornerType: 0
   sandboxOffset: {x: 0, y: 0, z: 0}
-  debuggerPrefab: {fileID: 0}
   sandboxSideLength: 0.75
   sandboxHeight: 0.75
